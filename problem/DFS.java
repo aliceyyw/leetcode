@@ -73,4 +73,30 @@ public class DFS {
         res.addFirst(start);
     }
 
+    //leetcode_99 Recover Binary Search Tree
+    private TreeNode first=null;
+    private TreeNode second=null;
+    private TreeNode pre=null;
+    public void recoverTree(TreeNode root){
+        dfsRecoverBST(root);
+        int temp = first.val;
+        first.val = second.val;
+        second.val = temp;
+
+    }
+    private void dfsRecoverBST(TreeNode root){
+        if(root==null) return;
+        dfsRecoverBST(root.left);
+        if(pre!=null && pre.val>=root.val){
+            if(first==null){
+                first=pre;
+            }
+            if(first!=null){
+              second = root;
+            }
+        }
+        pre = root;
+        dfsRecoverBST(root.right);
+    }
+
 }

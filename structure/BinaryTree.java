@@ -24,6 +24,7 @@ public class BinaryTree {
         return root;
     }
 
+    //inorder
     public static void printTree(TreeNode root){
         if(root!=null){
             printTree(root.left);
