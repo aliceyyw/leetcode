@@ -51,6 +51,45 @@ public class DFS {
         onstack[v]=false;
     }
 
+    //leetcode_207 Course_Schedule
+    //to find the possibility of course scheduling with the given dependency
+    class HasCycle{
+        boolean hascycle;
+        public HasCycle(){
+            hascycle=false;
+        }
+    }
+    public boolean canFinish(int numCourses, int[][] prerequisites){
+        Graph g = new Graph(numCourses);
+        for(int[] edge : prerequisites){
+            g.addEdge(edge[1],edge[0]);
+        } g.printEdge();
+        boolean onstack[] = new boolean[numCourses];
+        boolean marked[] = new boolean[numCourses];
+        HasCycle hascycle = new HasCycle();
+        for(int j=0;j<numCourses;j++){
+            if(!marked[j])
+                findCycle(g,j,onstack,marked,hascycle);
+        }
+        return !hascycle.hascycle;   //hascycle = not possible
+    }
+
+    private void findCycle(Graph g, int v,boolean[] onstack, boolean[] marked,HasCycle hascycle){
+        if(hascycle.hascycle==true) return;
+        marked[v]=true;
+        onstack[v] = true;
+        for(int edge : g.adj.get(v)){
+            if(marked[edge]==false){
+                 findCycle(g,edge,onstack,marked,hascycle);
+            }else if(onstack[edge]){
+                hascycle.hascycle=true;
+            }
+        }
+        onstack[v]=false;
+
+    }
+
+
     //leetcode_332 Reconstruct Itinerary
     // find an Eulerian circuit with smallest lexical order in a directed graph
     public List<String> findItinerary(String[][] tickets){

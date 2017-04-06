@@ -32,8 +32,7 @@ public class Graph {
         }
 
         public void addEdge(int w, int v){
-            List<Integer> vlist = adj.get(w);
-            vlist.add(v);
+            adj.get(w).add(v);
             E++;
         }
 
