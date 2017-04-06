@@ -235,18 +235,19 @@ public class BinaryTree {
         if(preorder.length!=inorder.length) return null;
         if(preorder.length==0) return null;
         TreeNode root = new TreeNode(preorder[0]);
-        buildTreeRecur(root,preorder,inorder);
+        buildTreeRecur(root,preorder,inorder,preorder.length,0,0);
         return root;
     }
-    private static void buildTreeRecur(TreeNode root,int[] preorder, int[] inorder ){
-        int rootIndex = 0;
+    private static void buildTreeRecur(TreeNode root,int[] preorder, int[] inorder,int length,int prestart,int
+            instart ){
+        int rootIndex = instart;
         //mark the place of rootindex in the inorder array
         for(;rootIndex<inorder.length;rootIndex++){
             if(inorder[rootIndex]==root.val)
                 break;
         }
-        int leftlen = rootIndex;
-        int rightlen = inorder.length-rootIndex-1;
+        int leftlen = rootIndex-instart;
+        int rightlen = length-leftlen-1;
 
         // new arrays for the left kid if exists leftlen = rootIndex
         if(leftlen>0){
@@ -255,14 +256,8 @@ public class BinaryTree {
             }
             // if > 1 recursively build the left node
             else {
-                int[] leftpreorder = new int[leftlen];
-                int[] leftinorder = new int[leftlen];
-                root.left = new TreeNode(preorder[1]);
-                for (int j = 0; j < leftlen; j++) {
-                    leftpreorder[j] = preorder[j + 1];
-                    leftinorder[j] = inorder[j];
-                }
-                buildTreeRecur(root.left, leftpreorder, leftinorder);
+                root.left = new TreeNode(preorder[prestart+1]);
+                buildTreeRecur(root.left, preorder,inorder,leftlen,prestart+1,instart);
             }
         }
         //new arrays for the right kid if exists rightlen = inorder.length - rootIndex-1
@@ -272,14 +267,8 @@ public class BinaryTree {
             }
             //if > 1 recursively build the right node
             else{
-                int[] rightpreorder = new int[rightlen];
-                int[] rightinorder = new int[rightlen];
-                for(int k=0;k<rightlen;k++){
-                    rightpreorder[k] = preorder[k+rootIndex+1];
-                    rightinorder[k] = inorder[rootIndex+k+1];
-                }
-                root.right = new TreeNode(rightpreorder[0]);
-                buildTreeRecur(root.right,rightpreorder,rightinorder);
+                root.right = new TreeNode(preorder[prestart+leftlen+1]);
+                buildTreeRecur(root.right,preorder,inorder,rightlen,prestart+leftlen+1,rootIndex+1);
             }
         }
     }
